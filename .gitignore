@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# TypeScript build cache
+tsconfig.tsbuildinfo
+tsconfig.node.tsbuildinfo
+
+# Vite
+.vite/
+
+# Environment variables (no secrets in this local-only build)
+.env
+.env.local
+.env.*.local
+
+# Editor
+.DS_Store
+.idea/
+*.swp
+
+# Test coverage
+coverage/
+
+.env
+.env.local
+.env.*.local

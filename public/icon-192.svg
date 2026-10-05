@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="32" fill="#faf9f7"/>
+  <path d="M96 40 L150 140 H42 Z" fill="none" stroke="#c2703e" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M96 70 L125 130 H67 Z" fill="#c2703e" opacity="0.15"/>
+  <text x="96" y="165" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="600" fill="#1a1917">VM</text>
+</svg>
