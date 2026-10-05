@@ -6,7 +6,7 @@ import { useStudySession } from '../hooks/useStudySession';
 import { useAllSessions } from '../db/hooks';
 import { DayPickerGrid } from '../components/shared/DayPickerGrid';
 import { ThemeToggle } from '../components/shared/ThemeToggle';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface HomePageProps {
   deck: Deck;
@@ -69,7 +69,7 @@ export function HomePage({ deck }: HomePageProps) {
 
   return (
     <motion.div
-      className="flex-1 flex flex-col w-full py-8 px-4 relative"
+      className="flex-1 flex flex-col w-full pt-8 pb-36 px-4 relative"
       variants={container}
       initial="hidden"
       animate="show"
@@ -140,31 +140,60 @@ export function HomePage({ deck }: HomePageProps) {
             onRangeSelect={(start, end) => setSelectedRange(start === 0 ? null : { start, end })}
             mode="session"
           />
-          <button
-            onClick={() => selectedRange && setShowConfirm(true)}
-            disabled={!selectedRange}
-            className="w-full mt-6 bg-accent text-white dark:text-surface py-3 rounded-button font-medium text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
-          >
-            {selectedRange ? `Start — ${selectedWordCount} cards` : 'Select days to begin'}
-          </button>
         </motion.div>
       )}
 
-      {/* Bottom nav links */}
-      <motion.div variants={item} className="flex justify-center gap-8 mt-10">
-        <button onClick={() => navigate('/library')} className="text-ink-secondary hover:text-ink text-sm font-medium flex items-center gap-1 transition-colors">
-          Library <span aria-hidden="true">→</span>
-        </button>
-        <button onClick={() => navigate('/missing')} className="text-ink-secondary hover:text-ink text-sm font-medium flex items-center gap-1 transition-colors">
-          Missed <span aria-hidden="true">→</span>
-        </button>
-        <button onClick={() => navigate('/progress')} className="text-ink-secondary hover:text-ink text-sm font-medium flex items-center gap-1 transition-colors">
-          Progress <span aria-hidden="true">→</span>
-        </button>
-        <button onClick={() => navigate('/settings')} className="text-ink-secondary hover:text-ink text-sm font-medium flex items-center gap-1 transition-colors">
-          Settings <span aria-hidden="true">→</span>
-        </button>
-      </motion.div>
+      {/* Slide-up Begin Bar */}
+      <AnimatePresence>
+        {selectedRange && !session && (
+          <motion.div
+            initial={{ y: '120%', opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: '120%', opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="fixed bottom-[calc(env(safe-area-inset-bottom)+64px)] left-0 right-0 z-40 px-4 pointer-events-none"
+          >
+            <div className="w-full max-w-2xl mx-auto pointer-events-auto bg-surface-raised shadow-card-hover border border-border rounded-xl p-4 flex items-center justify-between">
+              <div>
+                <div className="text-sm font-semibold text-ink">
+                  {selectedRange.start === selectedRange.end
+                    ? `Day ${selectedRange.start}`
+                    : `Days ${selectedRange.start}–${selectedRange.end}`}
+                </div>
+                <div className="text-xs text-ink-secondary">{selectedWordCount} cards</div>
+              </div>
+              <button
+                onClick={() => setShowConfirm(true)}
+                className="bg-accent text-white px-6 py-2.5 rounded-button text-sm font-medium hover:opacity-90 transition-opacity"
+              >
+                Begin
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Bottom Tab Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-surface-overlay backdrop-blur-xl border-t border-border z-30 pb-[env(safe-area-inset-bottom)]">
+        <div className="w-full max-w-2xl mx-auto flex h-14">
+          <button onClick={() => navigate('/')} className="flex-1 flex flex-col items-center justify-center gap-1 text-accent transition-colors">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+            <span className="text-[10px] font-medium">Home</span>
+          </button>
+          <button onClick={() => navigate('/missing')} className="flex-1 flex flex-col items-center justify-center gap-1 text-ink-tertiary hover:text-ink transition-colors">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span className="text-[10px] font-medium">Missed</span>
+          </button>
+          <button onClick={() => navigate('/progress')} className="flex-1 flex flex-col items-center justify-center gap-1 text-ink-tertiary hover:text-ink transition-colors">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+            <span className="text-[10px] font-medium">Progress</span>
+          </button>
+          <button onClick={() => navigate('/settings')} className="flex-1 flex flex-col items-center justify-center gap-1 text-ink-tertiary hover:text-ink transition-colors">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            <span className="text-[10px] font-medium">Settings</span>
+          </button>
+        </div>
+      </div>
 
       {/* Confirmation overlay */}
       {showConfirm && selectedRange && (
@@ -196,6 +225,6 @@ export function HomePage({ deck }: HomePageProps) {
           </motion.div>
         </div>
       )}
-    </motion.div>
+</motion.div>
   );
 }

@@ -23,11 +23,11 @@ export const CardBack: React.FC<CardBackProps> = ({ word }) => {
                   </div>
                 )}
                 <div className="flex-1">
-                  <div className="text-[17px] leading-relaxed text-ink font-sans">
+                  <div className="text-[17px] md:text-[19px] leading-relaxed text-ink font-sans">
                     {sense.definition}
                   </div>
                   {sense.example && (
-                    <div className="italic text-ink-secondary text-[16px] mt-1 pl-3 border-l-2 border-accent">
+                    <div className="italic text-ink-secondary text-[16px] md:text-[18px] mt-1 md:mt-2 pl-3 border-l-2 border-accent">
                       {sense.example}
                     </div>
                   )}

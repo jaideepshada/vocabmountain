@@ -135,9 +135,16 @@
     padding-right: env(safe-area-inset-right);
   }
 
+  .show-on-touch {
+    display: none !important;
+  }
+
   @media (pointer: coarse) {
     .hide-on-touch {
       display: none !important;
+    }
+    .show-on-touch {
+      display: flex !important;
     }
   }
 }

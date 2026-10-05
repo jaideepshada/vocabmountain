@@ -103,14 +103,6 @@ export const DayPickerGrid: React.FC<DayPickerGridProps> = ({
         ))}
       </div>
 
-      {mode === 'session' && (
-        <button 
-          onClick={handleSelectAll}
-          className="w-full py-3 mt-2 rounded-button bg-surface-raised border border-border text-ink font-medium hover:bg-surface-overlay transition-colors"
-        >
-          All 34 Days
-        </button>
-      )}
     </div>
   );
 };

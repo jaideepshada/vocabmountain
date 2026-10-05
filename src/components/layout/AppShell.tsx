@@ -1,4 +1,5 @@
 import React from 'react';
+import { MotionConfig } from 'framer-motion';
 
 export interface AppShellProps {
   children: React.ReactNode;
@@ -6,10 +7,12 @@ export interface AppShellProps {
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-surface text-ink safe-area-pad">
-      <div className="max-w-2xl mx-auto w-full flex-1 flex flex-col relative">
-        {children}
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-[100dvh] flex flex-col bg-surface text-ink safe-area-pad">
+        <div className="max-w-2xl mx-auto w-full flex-1 flex flex-col relative">
+          {children}
+        </div>
       </div>
-    </div>
+    </MotionConfig>
   );
 };

@@ -40,7 +40,7 @@ export function FlipCard({ word, isFlipped, status, onFlip, swipeHandlers, direc
   };
 
   return (
-    <div className="perspective-container w-full max-w-lg md:max-w-xl mx-auto" style={{ height: 'min(60dvh, 480px)' }}>
+    <div className="perspective-container w-full max-w-lg md:max-w-2xl mx-auto" style={{ height: 'min(60dvh, 600px)' }}>
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={word.id}
@@ -50,7 +50,7 @@ export function FlipCard({ word, isFlipped, status, onFlip, swipeHandlers, direc
           animate="center"
           exit="exit"
           transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-          className="w-full h-full"
+          className="w-full h-full touch-none"
           {...swipeHandlers}
         >
           {/* The flip container */}
@@ -84,7 +84,7 @@ export function FlipCard({ word, isFlipped, status, onFlip, swipeHandlers, direc
               )}
               <h1
                 className="font-serif text-ink text-center px-6 select-none"
-                style={{ fontSize: 'clamp(2rem, 8vw, 3.5rem)', letterSpacing: '-0.02em', lineHeight: 1.1 }}
+                style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', letterSpacing: '-0.02em', lineHeight: 1.1 }}
               >
                 {word.word}
               </h1>
