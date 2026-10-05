@@ -4,6 +4,7 @@ import type { Deck } from '../core/types';
 import { NavBar } from '../components/layout/NavBar';
 import { useAllSessions, useAllEvents } from '../db/hooks';
 import { DayPickerGrid } from '../components/shared/DayPickerGrid';
+import { MountainProgress } from '../components/progress/MountainProgress';
 
 interface ProgressPageProps {
   deck: Deck;
@@ -40,7 +41,7 @@ export function ProgressPage({ deck: _deck }: ProgressPageProps) {
     };
   }, [allSessions, allEvents]);
 
-  const fillPercent = (stats.daysCovered / 34) * 100;
+  
 
   return (
     <div className="flex-1 flex flex-col w-full overflow-hidden">
@@ -48,28 +49,7 @@ export function ProgressPage({ deck: _deck }: ProgressPageProps) {
 
       <div className="flex-1 overflow-y-auto p-6 space-y-8">
         {/* Mountain visualization */}
-        <div className="flex justify-center">
-          <div className="relative w-48 h-32" aria-label={`${stats.daysCovered} of 34 days completed`}>
-            <svg viewBox="0 0 100 60" className="w-full h-full" fill="none" aria-hidden="true">
-              {/* Fill (clipped to progress) */}
-              <clipPath id="mountain-clip">
-                <rect x="0" y={60 - (fillPercent / 100) * 60} width="100" height="60" />
-              </clipPath>
-              {/* Filled area */}
-              <path d="M5 55 L50 5 L95 55 Z" fill="var(--color-accent)" opacity="0.2" clipPath="url(#mountain-clip)"
-                style={{ transition: 'all 1s ease-out' }} />
-              {/* Outline */}
-              <path d="M5 55 L50 5 L95 55 Z" stroke="var(--color-border)" strokeWidth="2" strokeLinejoin="round" />
-              {/* Inner ridge */}
-              <path d="M20 55 L50 20 L80 55" stroke="var(--color-border-subtle)" strokeWidth="1" strokeLinejoin="round" />
-            </svg>
-            <div className="absolute inset-0 flex items-end justify-center pb-1">
-              <span className="text-xs text-ink-secondary font-medium">
-                {stats.daysCovered}/34 days
-              </span>
-            </div>
-          </div>
-        </div>
+        <MountainProgress coveredDays={stats.completedDays} />
 
         {/* Stats grid */}
         <div className="grid grid-cols-2 gap-3">

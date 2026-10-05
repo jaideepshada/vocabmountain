@@ -1,6 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { SessionType } from '../../core/types';
+import { useAllSessions } from '../../db/hooks';
+import { coveredDays } from '../../core/session';
+import { MountainProgress } from '../progress/MountainProgress';
+
 
 interface CompletionScreenProps {
   totalCards: number;
@@ -12,6 +16,9 @@ export const CompletionScreen: React.FC<CompletionScreenProps> = ({
   totalCards,
   onGoHome,
 }) => {
+  const sessions = useAllSessions();
+  const days = coveredDays(sessions);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -66,6 +73,10 @@ export const CompletionScreen: React.FC<CompletionScreenProps> = ({
         <motion.p variants={itemVariants} className="text-lg text-ink-secondary mb-10">
           {totalCards} cards mastered
         </motion.p>
+
+        <motion.div variants={itemVariants} className="w-full mb-10">
+          <MountainProgress coveredDays={days} compact />
+        </motion.div>
         
         <motion.button
           variants={itemVariants}

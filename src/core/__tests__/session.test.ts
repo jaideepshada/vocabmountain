@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
+import { coveredDays,
   deriveSessionState,
   buildSessionDeck,
   buildOrderedCardList,
@@ -155,5 +155,40 @@ describe('session', () => {
     const state = deriveSessionState([1], [evt, evt], 'sess1');
     expect(state.redCount).toBe(1);
     expect(state.cardStatuses.get(1)).toBe('missed');
+  });
+});
+
+
+describe('coveredDays', () => {
+  it('returns empty set for no sessions', () => {
+    expect(coveredDays([])).toEqual(new Set());
+  });
+
+  it('includes days from a completed session', () => {
+    const s = { completedAt: '2024-01-01', scope: { startDay: 2, endDay: 4 } } as any;
+    const days = coveredDays([s]);
+    expect(days.has(2)).toBe(true);
+    expect(days.has(3)).toBe(true);
+    expect(days.has(4)).toBe(true);
+    expect(days.has(5)).toBe(false);
+    expect(days.size).toBe(3);
+  });
+
+  it('ignores incomplete sessions', () => {
+    const s = { completedAt: null, scope: { startDay: 1, endDay: 3 } } as any;
+    expect(coveredDays([s]).size).toBe(0);
+  });
+
+  it('handles overlapping scopes', () => {
+    const s1 = { completedAt: 'time', scope: { startDay: 1, endDay: 3 } } as any;
+    const s2 = { completedAt: 'time', scope: { startDay: 2, endDay: 5 } } as any;
+    const days = coveredDays([s1, s2]);
+    expect(days.size).toBe(5);
+    expect(Array.from(days).sort()).toEqual([1, 2, 3, 4, 5]);
+  });
+
+  it('can cover all 34 days', () => {
+    const s = { completedAt: 'time', scope: { startDay: 1, endDay: 34 } } as any;
+    expect(coveredDays([s]).size).toBe(34);
   });
 });

@@ -1,3 +1,4 @@
+import type { Session } from './types';
 import { ReviewEvent, DerivedSessionState, Word, OrderMode, CardStatus } from './types';
 import { seededShuffle } from './shuffle';
 
@@ -71,4 +72,16 @@ export function getMissedWordIds(state: DerivedSessionState): number[] {
     }
   }
   return missed;
+}
+
+export function coveredDays(sessions: readonly Session[]): ReadonlySet<number> {
+  const covered = new Set<number>();
+  for (const s of sessions) {
+    if (s.completedAt !== null) {
+      for (let d = s.scope.startDay; d <= s.scope.endDay; d++) {
+        covered.add(d);
+      }
+    }
+  }
+  return covered;
 }
