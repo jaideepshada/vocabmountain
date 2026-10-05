@@ -92,7 +92,6 @@ export function StudyPage({ deck }: StudyPageProps) {
   const swipeHandlers = useSwipe({
     onSwipeLeft: handleNext,
     onSwipeRight: handlePrev,
-    onTap: flipCard,
   });
 
   if (!session) return null;

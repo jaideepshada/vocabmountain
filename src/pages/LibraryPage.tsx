@@ -49,7 +49,6 @@ export function LibraryPage({ deck }: LibraryPageProps) {
   const swipeHandlers = useSwipe({
     onSwipeLeft: handleNext,
     onSwipeRight: handlePrev,
-    onTap: flipCard,
   });
 
   const selectDay = (day: number) => {
