@@ -83,7 +83,7 @@ export function StudyPage({ deck }: StudyPageProps) {
       onSpace: flipCard,
       onLeft: handlePrev,
       onRight: handleNext,
-      onKeyM: markMemorise,
+      onKeyG: markMemorise,
       onKeyR: markMissed,
       onKeyP: () => { if (currentCard) speak(currentCard.word); },
     },

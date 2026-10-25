@@ -13,7 +13,7 @@ export const KeyboardHintBar: React.FC = () => {
         <span>Navigate</span>
       </div>
       <div className="flex items-center gap-1.5">
-        <kbd className="border border-border rounded px-1.5 py-0.5 text-ink-secondary bg-surface-raised shadow-soft font-sans uppercase">M</kbd>
+        <kbd className="border border-border rounded px-1.5 py-0.5 text-ink-secondary bg-surface-raised shadow-soft font-sans uppercase">G</kbd>
         <span>Memorised</span>
       </div>
       <div className="flex items-center gap-1.5">

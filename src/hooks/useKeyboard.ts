@@ -4,7 +4,7 @@ interface KeyMap {
   readonly onSpace?: () => void;
   readonly onLeft?: () => void;
   readonly onRight?: () => void;
-  readonly onKeyM?: () => void;
+  readonly onKeyG?: () => void;
   readonly onKeyR?: () => void;
   readonly onKeyP?: () => void;
   readonly onEscape?: () => void;
@@ -12,7 +12,7 @@ interface KeyMap {
 
 /**
  * Binds keyboard shortcuts for the study view.
- * Space = flip, Left/Right = navigate, M = Memorised, R = Missed, P = Pronounce.
+ * Space = flip, Left/Right = navigate, G = Memorised, R = Missed, P = Pronounce.
  */
 export function useKeyboard(keyMap: KeyMap, enabled = true): void {
   const handler = useCallback(
@@ -34,9 +34,9 @@ export function useKeyboard(keyMap: KeyMap, enabled = true): void {
           e.preventDefault();
           keyMap.onRight?.();
           break;
-        case 'KeyM':
+        case 'KeyG':
           e.preventDefault();
-          keyMap.onKeyM?.();
+          keyMap.onKeyG?.();
           break;
         case 'KeyR':
           e.preventDefault();
