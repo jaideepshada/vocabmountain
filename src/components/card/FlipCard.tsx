@@ -3,6 +3,7 @@ import type { Word } from '../../core/types';
 import { CardBack } from './CardBack';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CardStatus } from '../../core/types';
+import { usePronunciation } from '../../hooks/usePronunciation';
 
 interface FlipCardProps {
   word: Word;
@@ -18,6 +19,8 @@ interface FlipCardProps {
 }
 
 export function FlipCard({ word, isFlipped, status, onFlip, swipeHandlers, direction }: FlipCardProps) {
+  const { speak, isSpeaking, supported } = usePronunciation();
+
   const borderClass =
     status === 'memorised'
       ? 'border-semantic-green bg-semantic-green-subtle'
@@ -88,6 +91,32 @@ export function FlipCard({ word, isFlipped, status, onFlip, swipeHandlers, direc
               >
                 {word.word}
               </h1>
+
+              {/* Speaker button */}
+              {supported && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); speak(word.word); }}
+                  aria-label={`Pronounce ${word.word}`}
+                  className={`mt-5 flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-all select-none
+                    ${isSpeaking
+                      ? 'border-accent text-accent bg-accent-subtle'
+                      : 'border-border text-ink-tertiary hover:border-accent hover:text-accent'
+                    }`}
+                >
+                  {/* Speaker icon */}
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    {isSpeaking ? (
+                      <>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M12 6v12m-3.536-9.536a5 5 0 000 7.072" />
+                      </>
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M11.293 6.293L6 11H3v2h3l5.293 4.707A1 1 0 0013 17V7a1 1 0 00-1.707-.707z" />
+                    )}
+                  </svg>
+                  {isSpeaking ? 'Speaking…' : 'Pronounce'}
+                </button>
+              )}
+
               <p className="mt-4 text-xs text-ink-tertiary tracking-widest uppercase select-none">
                 tap to reveal
               </p>

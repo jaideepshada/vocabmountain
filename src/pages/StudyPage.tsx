@@ -4,6 +4,7 @@ import type { Deck } from '../core/types';
 import { useStudySession } from '../hooks/useStudySession';
 import { useKeyboard } from '../hooks/useKeyboard';
 import { useSwipe } from '../hooks/useSwipe';
+import { usePronunciation } from '../hooks/usePronunciation';
 import { FlipCard } from '../components/card/FlipCard';
 import { ControlBar } from '../components/session/ControlBar';
 import { CompletionScreen } from '../components/session/CompletionScreen';
@@ -40,6 +41,7 @@ export function StudyPage({ deck }: StudyPageProps) {
   const [direction, setDirection] = useState<'next' | 'prev' | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { speak } = usePronunciation();
 
   const wordsMap = useMemo(() => {
     const map = new Map<number, typeof deck[0]>();
@@ -83,6 +85,7 @@ export function StudyPage({ deck }: StudyPageProps) {
       onRight: handleNext,
       onKeyM: markMemorise,
       onKeyR: markMissed,
+      onKeyP: () => { if (currentCard) speak(currentCard.word); },
     },
     !!session,
   );
