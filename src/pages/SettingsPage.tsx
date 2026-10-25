@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavBar } from '../components/layout/NavBar';
-import { serializeProgress } from '../core/exportImport';
-import { deserializeProgress } from '../core/exportImport';
+import { serializeProgress, deserializeProgress } from '../core/exportImport';
 import { getAllEvents, getAllSessions, importData, clearAllData } from '../db/database';
 import { useTheme, type Theme } from '../hooks/useTheme';
-import { AuthSection } from '../components/auth/AuthSection';
-import { supabase } from '../core/supabase';
 
 export function SettingsPage() {
   const navigate = useNavigate();
@@ -68,22 +65,10 @@ export function SettingsPage() {
   };
 
   const handleClear = async () => {
-    const ok = window.confirm('Delete ALL progress? This cannot be undone and will wipe both local and cloud data.');
+    const ok = window.confirm('Delete ALL progress? This cannot be undone.');
     if (!ok) return;
     try {
-      // 1. Wipe cloud data if logged in
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // Deleting sessions will cascade and delete review_events as well based on our SQL setup, 
-        // but we explicitly delete both just to be safe.
-        await supabase.from('review_events').delete().eq('user_id', user.id);
-        await supabase.from('sessions').delete().eq('user_id', user.id);
-      }
-      
-      // 2. Wipe local data
       await clearAllData();
-      
-      // 3. Reload app to clear state
       window.location.reload();
     } catch (e) {
       console.error(e);
@@ -116,11 +101,12 @@ export function SettingsPage() {
           </div>
         </section>
 
-        <AuthSection />
-
         {/* Data section */}
         <section>
           <h2 className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider mb-4">Data</h2>
+          <p className="text-xs text-ink-tertiary mb-4">
+            Your progress is saved locally on this device. Use Export/Import to back up or move your data.
+          </p>
           <div className="space-y-3">
             <button
               onClick={handleExport}
@@ -160,7 +146,7 @@ export function SettingsPage() {
           >
             Clear All Data
             <span className="block text-xs font-normal opacity-70 mt-0.5">
-              Deletes all sessions and review history
+              Deletes all sessions and review history from this device
             </span>
           </button>
         </section>
